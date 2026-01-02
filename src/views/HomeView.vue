@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import MetricCard from '@/components/dashboard/MetricCard.vue'
 
 // Später kommen diese Daten aus einem Store oder einer API
@@ -41,10 +42,29 @@ const companies = [
     isPositive: false,
   },
 ]
+
+const backendMessage = ref('Loading message from backend...')
+
+onMounted(async () => {
+  try {
+    const response = await fetch('/api/ping')
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+    const data = await response.json()
+    backendMessage.value = data.message
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error)
+    backendMessage.value = 'Failed to load message.'
+  }
+})
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-4">
-    <MetricCard v-for="company in companies" :key="company.name" v-bind="company" />
+  <div>
+    <h2 class="text-xl mb-4">Message from Backend: "{{ backendMessage }}"</h2>
+    <div class="flex flex-wrap gap-4">
+      <MetricCard v-for="company in companies" :key="company.name" v-bind="company" />
+    </div>
   </div>
 </template>
