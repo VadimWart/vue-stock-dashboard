@@ -1,36 +1,38 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# --- Frontend (Node/Vue) ---
 node_modules
 .DS_Store
 dist
 dist-ssr
 coverage
 *.local
+.eslintcache
+*.tsbuildinfo
 
-# Editor directories and files
+# --- Backend (Python/FastAPI) ---
+# Virtuelle Umgebung
+venv/
+.venv/
+env/
+
+# Python Kompilation & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+
+# Umgebungsvariablen (Secrets)
+.env
+.flaskenv
+
+# --- Editor & System ---
 .vscode/*
 !.vscode/extensions.json
 .idea
 *.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
 
-*.tsbuildinfo
-
-.eslintcache
-
-# Cypress
+# --- Cypress/Vitest ---
 /cypress/videos/
 /cypress/screenshots/
-
-# Vitest
 __screenshots__/
