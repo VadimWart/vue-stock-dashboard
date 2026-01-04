@@ -4,22 +4,22 @@ import { RouterView } from 'vue-router'
 
 <template>
   <div class="min-h-screen bg-slate-950 text-slate-50 p-6 font-sans">
-    
+
     <header class="mb-8">
-      <h1 class="text-2xl font-bold tracking-tight">The Magnificent Seven Companies</h1>
+      <h1 class="text-2xl font-bold tracking-tight">Stocks Live Tracker</h1>
     </header>
-    
+
     <main>
       <RouterView />
     </main>
-    
+
   </div>
 </template>
 
 <style>
-  
+
 body {
   margin: 0;
-  background-color: #020617; /* Entspricht slate-950 */
+  background-color: #020617;
 }
 </style>

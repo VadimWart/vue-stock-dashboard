@@ -2,69 +2,47 @@
 import { ref, onMounted } from 'vue'
 import MetricCard from '@/components/dashboard/MetricCard.vue'
 
-// Später kommen diese Daten aus einem Store oder einer API
-const companies = [
-  { name: 'Apple', revenue: '38.52', changeValue: '1.06', changePercent: '2.83', isPositive: true },
-  {
-    name: 'Meta',
-    revenue: '435.57',
-    changeValue: '5.81',
-    changePercent: '1.32',
-    isPositive: false,
-  },
-  {
-    name: 'Amazon',
-    revenue: '127.09',
-    changeValue: '3.45',
-    changePercent: '2.79',
-    isPositive: true,
-  },
-  {
-    name: 'Microsoft',
-    revenue: '52.87',
-    changeValue: '0.98',
-    changePercent: '1.89',
-    isPositive: true,
-  },
-  {
-    name: 'Google',
-    revenue: '76.03',
-    changeValue: '2.15',
-    changePercent: '2.91',
-    isPositive: false,
-  },
-  { name: 'Tesla', revenue: '24.32', changeValue: '1.12', changePercent: '4.82', isPositive: true },
-  {
-    name: 'Nvidia',
-    revenue: '13.51',
-    changeValue: '0.67',
-    changePercent: '5.21',
-    isPositive: false,
-  },
-]
+// definiert die Struktur der Firmendaten
+interface Company {
+  symbol: string;
+  name: string;
+  revenue: string;
+  changeValue: string;
+  changePercent: string;
+  isPositive: boolean;
+  logoUrl: string;
+}
 
-const backendMessage = ref('Loading message from backend...')
+// State-Variablen für die Firmen-Daten und den Ladezustand
+const companies = ref<Company[]>([])
+const loading = ref(true)
 
+// Daten vom Backend abrufen, wenn die Komponente gemountet wird
 onMounted(async () => {
   try {
-    const response = await fetch('/api/ping')
+    const response = await fetch('http://localhost:8000/api/metrics')
     if (!response.ok) {
-      throw new Error('Network response was not ok')
+      throw new Error('Netzwerk-Antwort war nicht ok')
     }
-    const data = await response.json()
-    backendMessage.value = data.message
+    // Daten setzen
+    companies.value = await response.json()
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error)
-    backendMessage.value = 'Failed to load message.'
+    console.error('Fehler beim Abrufen der Daten:', error)
+  } finally {
+    loading.value = false
   }
 })
 </script>
 
 <template>
-  <div>
-    <h2 class="text-xl mb-4">Message from Backend: "{{ backendMessage }}"</h2>
-    <div class="flex flex-wrap gap-4">
-      <MetricCard v-for="company in companies" :key="company.name" v-bind="company" />
+  <div class="p-6">
+
+    <div v-if="loading" class="text-slate-400 animate-pulse">
+      Fetching live market data...
+    </div>
+
+    <div v-else class="flex flex-wrap gap-4">
+      <MetricCard v-for="company in companies" :key="company.symbol" v-bind="company" />
     </div>
   </div>
 </template>
