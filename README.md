@@ -25,6 +25,9 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
+![Backend CI](https://github.com/VadimWart/vue-stock-dashboard/actions/workflows/backend.yml/badge.svg)
+![Frontend CI](https://github.com/VadimWart/vue-stock-dashboard/actions/workflows/frontend.yml/badge.svg)
+
 ```sh
 npm install
 ```

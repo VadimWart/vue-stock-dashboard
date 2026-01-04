@@ -1,0 +1,27 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'backend/**' # Nur auslösen, wenn im Backend-Ordner was passiert
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  backend-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Backend Image
+        run: |
+          cd backend
+          docker build -t stock-backend:latest .
+
+      - name: Run Backend Tests
+        run: |
+          docker run --rm stock-backend:latest pytest
