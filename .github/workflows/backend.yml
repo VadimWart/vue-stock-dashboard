@@ -2,13 +2,16 @@ name: Backend CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
     paths:
-      - 'backend/**' # Nur auslösen, wenn im Backend-Ordner was passiert
+      - "backend/**"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'backend/**'
+      - "backend/**"
+      - "docker-compose.yml"
+      - "requirements.txt"
+      - ".github/workflows/backend.yml"
 
 jobs:
   backend-ci:
@@ -16,6 +19,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
 
       - name: Build Backend Image
         run: |
