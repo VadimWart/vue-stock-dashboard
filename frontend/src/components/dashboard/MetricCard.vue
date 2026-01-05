@@ -1,22 +1,13 @@
 <script setup lang="ts">
 import { Card, CardContent } from '@/components/ui/card'
+import StockChart from '@/components/dashboard/StockChart.vue'
+import type { CompanyMetric } from '@/types/dashboard'
 
-// definiert welche Daten die Karte von außen empfängt
-interface Props {
-  name: string
-  revenue: string
-  changeValue: string
-  changePercent: string
-  isPositive: boolean
-  logoUrl: string
-  symbol: string
-}
-
-defineProps<Props>()
+defineProps<CompanyMetric>()
 </script>
 
 <template>
-  <Card class="bg-slate-900/50 border-slate-800 text-white min-w-45 flex-1">
+  <Card class="bg-slate-900/50 border-slate-800 text-white w-full overflow-hidden">
     <CardContent class="p-4">
       <div class="flex items-center gap-2 mb-3">
         <div class="w-8 h-8 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
@@ -28,6 +19,8 @@ defineProps<Props>()
       <div class="text-2xl font-bold mb-1">
         {{ revenue }} <span class="text-[20px] text-slate-500 font-bold">$</span>
       </div>
+
+       <StockChart :history="history" :is-positive="isPositive" />
 
       <div class="flex items-center gap-2">
         <span

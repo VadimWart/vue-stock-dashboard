@@ -1,9 +1,10 @@
 export interface CompanyMetric {
-  id: string
+  symbol: string
   name: string
-  revenue: number
-  changeValue: number
-  changePercent: number
-  logo: string
-  color: string
+  revenue: string
+  changeValue: string
+  changePercent: string
+  isPositive: boolean
+  logoUrl: string
+  history: number[]
 }

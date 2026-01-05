@@ -21,7 +21,6 @@ app.add_middleware(
 )
 
 
-# Daten-Modell für TypeScript-Kompatibilität
 class CompanyMetric(BaseModel):
     name: str
     revenue: str
@@ -30,6 +29,7 @@ class CompanyMetric(BaseModel):
     isPositive: bool
     symbol: str
     logoUrl: str
+    history: List[float]
 
 
 # die Top 10 und ihre Domains global
@@ -54,13 +54,15 @@ async def get_metrics():
     tickers = list(TOP_10_MAP.keys())
 
     # Download der Kursdaten (Bulk-Download für alle 10 auf einmal ist schneller)
-    data = yf.download(tickers, period="2d", interval="1d", group_by="ticker")
+    data = yf.download(tickers, period="10d", interval="1d", group_by="ticker")
 
     for symbol in tickers:
         try:
             ticker_data = data[symbol]
             if len(ticker_data) < 2:
                 continue
+
+            history_list = ticker_data["Close"].dropna().tolist()
 
             current_price = ticker_data["Close"].iloc[-1]
             prev_close = ticker_data["Close"].iloc[-2]
@@ -80,6 +82,7 @@ async def get_metrics():
                     "changePercent": f"{change_pct:.2f}",
                     "isPositive": change_val >= 0,
                     "logoUrl": logo_url,
+                    "history": [round(p, 2) for p in history_list],
                 }
             )
         except Exception as exception:
