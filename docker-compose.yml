@@ -1,0 +1,22 @@
+services:
+  # --- Backend Dienst (FastAPI) ---
+  backend:
+    build:
+      context: ./backend      
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"           
+    restart: always           
+    environment:
+      - PYTHONUNBUFFERED=1    
+
+  # --- Frontend Dienst (Vue/Vite) ---
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile 
+    ports:
+      - "5173:5173" 
+    depends_on:
+      - backend    
+    restart: always
